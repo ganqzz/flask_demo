@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% set active_page = 'home' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  {% if current_user.is_authenticated() %}
+    {% if current_user.is_active() %}
+      {% include 'main/_authenticated.html' %}
+    {% else %}
+      <div class="alert alert-warning">
+        Please confirm your email.<br>
+        <small>Did not get the confirmation email?<br>
+          <a href="{{ url_for('auth.send_activation') }}">Send it again</a></small>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="my-4">
+      <h1>Bring in the music!</h1>
+      <p><a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login</a></p>
+    </div>
+  {% endif %}
+{% endblock %}

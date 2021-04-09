@@ -1,0 +1,33 @@
+{% if current_user.is_role(Role.EMPLOYER) %}
+  {% if not musicians %}
+    <div class="alert alert-danger">
+      There are no musicians to show.
+    </div>
+  {% endif %}
+  <div class="row my-4">
+    <div class="col col-lg-2">
+      <a href="{{ url_for('gig.create') }}" class="btn btn-primary">Create new gig</a>
+    </div>
+    {% if musicians %}
+      <div class="col col-lg-10">
+        <div class="row">
+          {% for musician in musicians %}
+            {% include 'account/_musician.html' %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% elif current_user.is_role(Role.MUSICIAN) %}
+  {% if gigs %}
+    <div class="row my-4">
+      {% for gig in gigs %}
+        {% include 'gig/_gig.html' %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-danger">
+      There are no gigs to show.
+    </div>
+  {% endif %}
+{% endif %}

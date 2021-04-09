@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Top | {{ super() }}{% endblock %}
+
+{% block content %}
+  <h1>Top</h1>
+  <ul>
+    <li><a href="{{ url_for('hello') }}">hello</a></li>
+    <li><a href="{{ url_for('cookie') }}">cookie demo</a></li>
+    <li><a href="{{ url_for('people.top') }}">people</a></li>
+  </ul>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}

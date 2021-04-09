@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% set active_page = 'login' %}
+{% from '_macros.html' import field_error_messages, error_messages %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col col-lg-8 offset-2 my-4">
+      <h2>Login</h2>
+      <form method="POST">
+        {{ form.csrf_token }}
+        {{ error_messages(form.errors) }}
+        <div class="form-group">
+          {{ form.email.label }}
+          {{ form.email(class="form-control") }}
+          {{ field_error_messages(form.email) }}
+        </div>
+        <div class="form-group">
+          {{ form.password.label }}
+          {{ form.password(class="form-control") }}
+          {{ field_error_messages(form.password) }}
+        </div>
+        <div class="form-group">
+          {{ form.remember_me.label }} {{ form.remember_me }}
+          {{ field_error_messages(form.remember_me) }}
+        </div>
+        <div class="form-group">
+          {{ form.submit(class="btn btn-primary form-control") }}
+        </div>
+      </form>
+      <p><a href="{{ url_for('auth.reset_password') }}">Forgot password? Ok, you can use this link
+        to reset password.</a></p>
+      <p><a href="{{ url_for('auth.register') }}">Not registered yet? Register here!</a></p>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{% block title %}{% endblock %} - Globomantics</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+  <a class="navbar-brand" href="{{ url_for('main.home') }}">Globomantics</a>
+  <ul class="navbar-menu">
+    <li class="navbar-menu-item {{ 'active' if active_page == 'home' }}">
+      <a href="{{ url_for('main.home') }}">Home</a>
+    </li>
+    {% if current_user.is_authenticated() %}
+      {% if current_user.is_admin() %}
+        <li class="navbar-menu-item {{ 'active' if active_page == 'admin_home' }}">
+          <a href="{{ url_for('admin.home') }}">Admin</a>
+        </li>
+      {% elif current_user.is_active() %}
+        <li class="navbar-menu-item {{ 'active' if active_page == 'account' }}">
+          <a href="{{ url_for('account.show', username=current_user.username) }}">Account
+            ({{ current_user.username }})</a>
+        </li>
+        <li class="navbar-menu-item {{ 'active' if active_page == 'my_gigs' }}">
+          <a href="{{ url_for('gig.my_gigs') }}">My gigs</a>
+        </li>
+      {% endif %}
+      <li class="navbar-menu-item">
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    {% else %}
+      <li class="navbar-menu-item {{ 'active' if active_page == 'register' }}">
+        <a href="{{ url_for('auth.register') }}">Register</a>
+      </li>
+      <li class="navbar-menu-item {{ 'active' if active_page == 'login' }}">
+        <a href="{{ url_for('auth.login') }}">Login</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
+<div class="container">
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% for type, content in messages %}
+      <div class="alert alert-{{ type }}">
+        {{ content }}
+        <a href="#" class="close">&times;</a>
+      </div>
+    {% endfor %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+
+{% block javascript %}{% endblock %}
+</body>
+</html>

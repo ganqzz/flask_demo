@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% if current_user == user %}{% set active_page = 'account' %}{% endif %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% if user.is_role(Role.MUSICIAN) %}
+  {% set profile_img = 'musician.png' %}
+{% elif user.is_role(Role.EMPLOYER) %}
+  {% set profile_img = 'employer.png' %}
+{% endif %}
+
+{% block content %}
+  <div class="row my-4">
+    <div class="col col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">
+            {% if not user.is_admin() %}
+              <img class="profile-img" height="50px"
+                   src="{{ url_for('static', filename='images/' + profile_img) }}"
+                   alt="{{ profile_img }}">
+            {% endif %}
+            {{ user.username }}
+            <small>
+              {% if user.is_role(Role.MUSICIAN) %}
+                (musician)
+              {% elif user.is_role(Role.EMPLOYER) %}
+                (employer)
+              {% elif user.is_role(Role.ADMIN) %}
+                (admin)
+              {% endif %}
+            </small>
+            {% if current_user == user %}
+              <div class="button-actions">
+                <a href="{{ url_for('account.edit') }}" class="btn btn-primary">Update</a>
+                <form class="delete-form" method="POST" action="{{ url_for('account.delete') }}">
+                  {{ delete_form.csrf_token }}
+                  {{ delete_form.submit(class="btn btn-danger",
+                 onclick="return confirm('Are you sure you want to delete your account permanently?');") }}
+                </form>
+              </div>
+            {% elif user.is_role(Role.MUSICIAN) and current_user.is_role(Role.EMPLOYER) %}
+              <div class="button-actions">
+                <a href="mailto:{{ user.email }}" class="btn btn-success">Send Email</a>
+              </div>
+            {% endif %}
+          </h3>
+          <p><b>Location:</b> {{ user.location | safe }}</p>
+          <p class="card-text"><em>{{ user.description | safe }}</em></p>
+        </div>
+      </div>
+
+      {% if not user.is_admin() %}
+        <div class="card my-4">
+          <div class="card-header">
+            {% if user.is_role(Role.MUSICIAN) %}
+              Gigs this musician is applied to
+            {% elif user.is_role(Role.EMPLOYER) %}
+              Gigs posted by this employer
+            {% endif %}
+          </div>
+          <div class="card-body">
+            {% for gig in gigs %}
+              <h3><a href="{{ url_for('gig.show', slug=gig.slug) }}">{{ gig.title | safe }}</a></h3>
+              <small><em>{{ gig.description | safe }}</em></small>
+              <hr class="form-border">
+            {% else %}
+              Nothing to show
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

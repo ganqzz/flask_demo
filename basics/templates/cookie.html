@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Cookie Demo | {{ super() }}{% endblock %}
+
+{% block content %}
+  <div>
+    <h2>Cookie Demo</h2>
+    <form id="form" method="POST">
+      <div>
+        <label for="text">Text:</label>
+        <input type="text" id="text" name="text" value="{{ text }}" autofocus>
+      </div>
+      <input type="submit" name="set" value="Set" form="form">
+    </form>
+    <button id="read">Read by JavaScript</button>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    document.getElementById('read').onclick = () => alert(document.cookie);
+  </script>
+{% endblock %}

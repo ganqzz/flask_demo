@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% set active_page = 'home' %}
+
+{% block content %}
+  <div class="row my-4">
+    <div class="col col-lg-3">
+      <form class="filter-form" action="{{ url_for('home') }}" method="GET">
+        <div class="form-group">
+          {{ form.title.label }}
+          {{ form.title(class="form-control") }}
+        </div>
+        <div class="form-group">
+          {{ form.price.label }}
+          {{ form.price(class="form-control") }}
+        </div>
+        <div class="form-group">
+          {{ form.category.label }}
+          {{ form.category(class="form-control category-filter") }}
+        </div>
+        <div class="form-group">
+          {{ form.subcategory.label }}
+          {{ form.subcategory(class="form-control") }}
+        </div>
+        <div class="form-group">
+          {{ form.submit(class="btn btn-primary form-control") }}
+        </div>
+      </form>
+    </div>
+    <div class="col col-lg-9">
+      <div class="row card-wrapper">
+        {% include '_items.html' %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='js/subcategory.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/filter.js') }}"></script>
+{% endblock %}

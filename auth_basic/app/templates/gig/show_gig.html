@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ gig.title | safe }}{% endblock %}
+
+{% block content %}
+  <div class="row my-4">
+    <div class="col col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">
+            <img class="gig-img" height="50px"
+                 src="{{ url_for('static', filename='images/gig.png') }}"
+                 alt="gig.png">
+            {{ gig.title | safe }}
+            {% if current_user == gig.employer %}
+              <div class="button-actions">
+                <a href="{{ url_for('gig.edit', slug=gig.slug) }}" class="btn btn-primary">Update</a>
+                <form class="delete-form" method="POST" action="{{ url_for('gig.delete', slug=gig.slug) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <input type="submit" class="btn btn-danger" value="Delete"
+                         onclick="return confirm('Are you sure you want to permanently delete this gig?');">
+                </form>
+              </div>
+            {% endif %}
+            {% if current_user.is_role(Role.MUSICIAN) %}
+              <div class="button-actions">
+                {% if current_user.is_applied_to(gig) %}
+                  <button class="btn btn-warning" disabled>Applied...</button>
+                {% else %}
+                  <form method="POST" action="{{ url_for('gig.apply_to_gig', slug=gig.slug) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="submit" class="btn btn-warning" value="Apply">
+                  </form>
+                {% endif %}
+              </div>
+            {% endif %}
+          </h3>
+          <h4>{{ '$%.2f' | format(gig.payment) }}</h4>
+          <p><b>Location:</b> {{ gig.location | safe }}</p>
+          <p class="card-text"><em>{{ gig.description | safe }}</em></p>
+        </div>
+        <div class="card-footer">Posted by:
+          <a href="{{ url_for('account.show', username=gig.employer.username) }}">{{ gig.employer.username }}</a>
+        </div>
+
+      </div>
+      <div class="card my-4">
+        <div class="card-header">Musicians applied to this gig</div>
+        <div class="card-body">
+          {% for musician in musicians %}
+            <h3>
+              <a href="{{ url_for('account.show', username=musician.username) }}">{{ musician.username }}</a>
+            </h3>
+            <hr class="card-border">
+          {% else %}
+            Nothing to show
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

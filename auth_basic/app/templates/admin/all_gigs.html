@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% set active_page = 'all_gigs' %}
+
+{% block title %}Manage gigs{% endblock %}
+
+{% block content %}
+  {% if gigs %}
+    <h3>All gigs</h3>
+    <div class="row my-4">
+      <div class="col col-lg-12">
+        {% for gig in gigs %}
+          <div class="card mb-4">
+            <div class="card-body">
+              <h3 class="card-title">
+                "{{ gig.title | safe }}" posted by {{ gig.employer.username }}
+                <div class="button-actions">
+                  <form class="delete-form" method="POST" action="{{ url_for('admin.delete_gig', id=gig.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="submit" class="btn btn-danger" value="Delete"
+                           onclick="return confirm('Are you sure you want to permanently delete this gig?');">
+                  </form>
+                </div>
+              </h3>
+              <p><small><em>{{ gig.description | safe }}</em></small></p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-warning">
+      There are no gigs to show.
+    </div>
+  {% endif %}
+{% endblock %}

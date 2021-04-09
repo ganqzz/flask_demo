@@ -1,0 +1,17 @@
+<div class="col col-lg-4 mb-4">
+  <div class="card">
+    <div class="card-body">
+      <img class="card-img-top"
+           src="{{ url_for('static', filename='images/musician.png') }}"
+           alt="musician.png">
+      <h3 class="card-title">
+        <a href="{{ url_for('account.show', username=musician.username) }}">{{ musician.username }}</a>
+      </h3>
+      <p>{{ musician.location }}</p>
+      <p class="card-text"><em>{{ musician.description | safe }}</em></p>
+    </div>
+    <div class="card-footer">
+      <a href="mailto:{{ musician.email }}" class="btn btn-success">Send email</a>
+    </div>
+  </div>
+</div>

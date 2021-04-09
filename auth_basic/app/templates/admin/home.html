@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% set active_page = 'admin_home' %}
+
+{% block title %}Admin Home{% endblock %}
+
+{% block content %}
+  <div class="my-4">
+    <h1>Admin home</h1>
+    <div><a href="{{ url_for('admin.all_users') }}">Manage users ≫</a></div>
+    <div><a href="{{ url_for('admin.all_gigs') }}">Manage gigs ≫</a></div>
+  </div>
+{% endblock %}

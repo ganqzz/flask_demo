@@ -1,0 +1,31 @@
+<div class="col col-lg-4 mb-4">
+  <div class="card">
+    <div class="card-body">
+      <img class="card-img-top"
+           src="{{ url_for('static', filename='images/gig.png') }}"
+           alt="gig.png">
+      <h3 class="card-title">
+        <a href="{{ url_for('gig.show', slug=gig.slug) }}">{{ gig.title | safe }}</a>
+      </h3>
+      <h4>{{ '$%.2f' | format(gig.payment) }}</h4>
+      <p>{{ gig.location | safe }}</p>
+      <p class="card-text"><em>{{ gig.description | safe }}</em></p>
+    </div>
+    <div class="card-footer">Posted by:
+      <a href="{{ url_for('account.show', username=gig.employer.username) }}">{{ gig.employer.username }}</a>
+      {% if active_page == 'home' %}
+        {% if current_user.is_role(Role.MUSICIAN) %}
+          <br>
+          {% if current_user.is_applied_to(gig) %}
+            <button class="btn btn-warning" disabled>Applied...</button>
+          {% else %}
+            <form method="POST" action="{{ url_for('gig.apply_to_gig', slug=gig.slug) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <input type="submit" class="btn btn-warning" value="Apply">
+            </form>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>

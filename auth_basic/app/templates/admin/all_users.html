@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% set active_page = 'all_users' %}
+
+{% block title %}Manage users{% endblock %}
+
+{% block content %}
+  {% if users %}
+    <h3>All users</h3>
+    <div class="row my-4">
+      <div class="col col-lg-12">
+        {% for user in users %}
+          <div class="card mb-4">
+            <div class="card-body">
+              <h3 class="card-title">
+                {{ user.username }}
+                <div class="button-actions">
+                  <form class="delete-form" method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="submit" class="btn btn-danger" value="Delete"
+                           onclick="return confirm('Are you sure you want to permanently delete this account?');">
+                  </form>
+                </div>
+              </h3>
+              <p>{{ user.email }}</p>
+              <p><small><em>{{ user.description | safe }}</em></small></p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-warning">
+      There are no users to show.
+    </div>
+  {% endif %}
+{% endblock %}

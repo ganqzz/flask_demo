@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% set active_page = 'my_gigs' %}
+
+{% block title %}My gigs{% endblock %}
+
+{% block content %}
+  {% if gigs %}
+    <h3>
+      {% if current_user.is_role(Role.MUSICIAN) %}
+        Gigs that you applied to
+      {% elif current_user.is_role(Role.EMPLOYER) %}
+        Gigs that you have posted
+      {% endif %}
+    </h3>
+    <div class="row my-4">
+      {% for gig in gigs %}
+        {% include 'gig/_gig.html' %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-warning">
+      There are no gigs to show.
+    </div>
+  {% endif %}
+{% endblock %}

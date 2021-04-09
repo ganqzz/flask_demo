@@ -1,0 +1,10 @@
+Flask
+Flask-SQLAlchemy
+flask-marshmallow
+marshmallow-sqlalchemy
+Flask-JWT-Extended
+Flask-Mail
+Flask-WTF
+python-dotenv
+python-slugify
+requests
